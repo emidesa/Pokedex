@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import pokeService from '../services/pokeService';
 import { Container, Pagination } from 'react-bootstrap';
 import PokemonCards from '../components/PokemonCards';
+import { useParams } from 'react-router-dom';
 
 const HomePage = () => {
    
     const [pokemon, setPokemon] = useState([]);
+    const { id } = useParams();
     const [currentPage, setCurrentPage] = useState(1);
     const [maxPage, setMaxPage] = useState(500);
 
@@ -31,7 +33,7 @@ const HomePage = () => {
 
     useEffect (() => {
         fetchPokemon();
-    }, []);
+    }, [id]);
 
 
 
