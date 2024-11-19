@@ -1,1 +1,89 @@
+:root {
+    --header-color : #3564ae;
+    --body-background : #2a4e89;
+    --element-backgound : #4f7ec9;
+    --white : #FFFFFF;
+    --title-color :#f5b585;
+    --font-style : 'Pokemon Solid', sans-serif;
+    --yellow-pokemon : #f5b585;
+    --type-normal : #ada594;
+    --type-combat : #a55239;
+    --type-flying : #9cadf7;
+    --type-poison : #b55aa5;
+    --type-ground : #d6b55a;
+    --type-rock : #bda55a;
+    --type-bug : #adbd21;
+    --type-spectrum : #6363b5;
+    --type-steel : #adadc6;
+    --type-plant : #7bce52;
+    --type-fire : #f75231;
+    --type-water : #399cff;
+    --type-electric : #ffc631;
+    --type-psy : #ff73a5;
+    --type-ice : #5acee7;
+    --type-dragon : #8858f6;
+    --type-darkness : #735a4a;
+    --type-fairy : #e09ae3;
+    --type-unknow : #68a090;
+}
 
+.normal{
+    background: var(--type-normal);
+}
+.fighting{
+    background: var(--type-combat);
+}
+.flying{
+    background: var(--type-flying);
+}
+.poison{
+    background: var(--type-poison);
+}
+.ground{
+    background: var(--type-ground);
+}
+.rock{
+    background: var(--type-rock);
+}
+.bug{
+    background: var(--type-bug);
+}
+.ghost{
+    background: var(--type-spectrum);
+}
+.steel{
+    background: var(--type-steel);
+}
+.fire{
+    background: var(--type-fire);
+}
+.grass{
+    background: var(--type-plant);
+}
+.water{
+    background: var(--type-water);
+}
+.electric{
+    background: var(--type-electric);
+}
+.psychic{
+    background: var(--type-psy);
+}
+.ice{
+    background: var(--type-ice);
+}
+.dragon{
+    background: var(--type-dragon);
+}
+.dark{
+    background: var(--type-darkness);
+}
+.fairly{
+    background: var(--type-fairy);
+}
+.unknown{
+    background: var(--type-fairy);
+}
+.shadow{
+    background: var(--type-darkness);
+}

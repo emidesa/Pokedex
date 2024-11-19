@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import pokeService from '../services/pokeService';
-import { Container, Pagination } from 'react-bootstrap';
+import { Button, Container, Pagination, Form } from 'react-bootstrap';
 import PokemonCards from '../components/PokemonCards';
 import { useParams } from 'react-router-dom';
 
@@ -10,6 +10,8 @@ const HomePage = () => {
     const { id } = useParams();
     const [currentPage, setCurrentPage] = useState(1);
     const [maxPage, setMaxPage] = useState(500);
+    const [searchValue, setSearchValue] = useState('');
+    const [searching, setSearching] = useState(false);
 
 
     const fetchPokemon = async () => {
@@ -31,15 +33,69 @@ const HomePage = () => {
         }
     }
 
+    const searchPokemon = async() => {
+
+        if(searchValue == "") {
+          fetchPokemon();
+          setSearching(false);
+        } else {
+        try {
+          const response = await pokeService.GetAllPoke(searchValue, currentPage);
+          setMaxPage(response.data.total_pages);
+          setPokemon(response.data.results);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+
+    useEffect(() => {
+        if (searching == false) {
+        fetchPokemon()
+       } else {
+         searchFilm()
+       }
+     }, [currentPage])
+
     useEffect (() => {
         fetchPokemon();
-    }, [id]);
+    }, [currentPage]);
 
 
 
     return <>
      <Container>
             <h1 className="m-5">All Pokemon</h1>
+
+            <Form onSubmit={(e) => {
+      e.preventDefault();
+      setCurrentPage(1);
+      setSearching (true);
+      searchPokemon();
+    }}>
+    
+      
+    <Form.Label htmlFor="search">Chercher un pokemon</Form.Label>
+      <Form.Control
+        type="text"
+        id="search"
+        aria-describedby="search"
+        placeholder="ex : évolie"
+        className="mb-3"
+        value={searchValue}
+        onChange={(e) => {
+          setSearchValue(e.currentTarget.value);
+        }}
+       
+      /> 
+    </Form>
+
+       <Button variant="primary" className="col-12 mb-3" onClick={() => {
+        setCurrentPage(1); 
+        setSearching (true);
+        searchPokemon();
+        }}>Rechercher</Button>
+
             <div className="d-flex justify-content-center flex-wrap gap-5">
                 {pokemon.map((pokemon2) => (
                     <PokemonCards 
