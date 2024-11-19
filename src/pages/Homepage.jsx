@@ -2,145 +2,110 @@ import React, { useEffect, useState } from 'react';
 import pokeService from '../services/pokeService';
 import { Button, Container, Pagination, Form } from 'react-bootstrap';
 import PokemonCards from '../components/PokemonCards';
-import { useParams } from 'react-router-dom';
 
 const HomePage = () => {
-   
     const [pokemon, setPokemon] = useState([]);
-    const { id } = useParams();
     const [currentPage, setCurrentPage] = useState(1);
-    const [maxPage, setMaxPage] = useState(500);
+    const [maxPage, setMaxPage] = useState(1);
     const [searchValue, setSearchValue] = useState('');
-    const [searching, setSearching] = useState(false);
-
+    const itemsPerPage = 20;
 
     const fetchPokemon = async () => {
         try {
-            const response = await pokeService.GetAllPoke();
-            console.log(response.data);
-            setPokemon(response.data.results);
-            setMaxPage(500);
-            setTimeout(() => {
-              window.scrollTo({
-                  top: 0,
-                  left: 0,
-                  behavior: "instant",
-                });
-          },50)
-            
+            const response = await pokeService.GetAllPoke(currentPage, itemsPerPage);
+            const allPokemon = response.data.results;
+
+            if (searchValue) {
+                const filteredPokemon = allPokemon.filter((p) =>
+                    p.name.toLowerCase().includes(searchValue.toLowerCase())
+                );
+                setPokemon(filteredPokemon);
+                setMaxPage(Math.ceil(filteredPokemon.length / itemsPerPage));
+            } else {
+                setPokemon(allPokemon);
+                setMaxPage(Math.ceil(response.data.count / itemsPerPage));
+            }
         } catch (error) {
-            console.log(error);
+            console.error("Error fetching Pokémon:", error);
         }
-    }
-
-    const searchPokemon = async() => {
-
-        if(searchValue == "") {
-          fetchPokemon();
-          setSearching(false);
-        } else {
-        try {
-          const response = await pokeService.GetAllPoke(searchValue, currentPage);
-          setMaxPage(response.data.total_pages);
-          setPokemon(response.data.results);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
-
-    useEffect(() => {
-        if (searching == false) {
-        fetchPokemon()
-       } else {
-         searchFilm()
-       }
-     }, [currentPage])
-
-    useEffect (() => {
-        fetchPokemon();
-    }, [currentPage]);
+    };
 
 
-
-    return <>
-     <Container>
-            <h1 className="m-5">All Pokemon</h1>
-
-            <Form onSubmit={(e) => {
-      e.preventDefault();
-      setCurrentPage(1);
-      setSearching (true);
-      searchPokemon();
-    }}>
-    
-      
-    <Form.Label htmlFor="search">Chercher un pokemon</Form.Label>
-      <Form.Control
-        type="text"
-        id="search"
-        aria-describedby="search"
-        placeholder="ex : évolie"
-        className="mb-3"
-        value={searchValue}
-        onChange={(e) => {
-          setSearchValue(e.currentTarget.value);
-        }}
-       
-      /> 
-    </Form>
-
-       <Button variant="primary" className="col-12 mb-3" onClick={() => {
+    const handleSearch = (e) => {
+        e.preventDefault();
         setCurrentPage(1); 
-        setSearching (true);
-        searchPokemon();
-        }}>Rechercher</Button>
+    };
+
+  
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
+   
+    useEffect(() => {
+        fetchPokemon();
+    }, [currentPage, searchValue]);
+
+    return (
+        <Container>
+            <h1 className="m-5">All Pokémon</h1>
+
+            <Form onSubmit={handleSearch}>
+                <Form.Label htmlFor="search">Search for a Pokémon</Form.Label>
+                <Form.Control
+                    type="text"
+                    id="search"
+                    placeholder="e.g., Bulbasaur"
+                    className="mb-3"
+                    value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                />
+                <Button variant="primary" className="col-12 mb-3" type="submit">
+                    Search
+                </Button>
+            </Form>
 
             <div className="d-flex justify-content-center flex-wrap gap-5">
-                {pokemon.map((pokemon2) => (
-                    <PokemonCards 
-                    pokemon={pokemon2} 
-                    key={pokemon2.name} 
+                {pokemon.map((poke) => (
+                    <PokemonCards
+                        pokemon={poke}
+                        key={poke.name}
                     />
                 ))}
             </div>
+
             <Pagination className="mt-5">
-        {currentPage > 1 && 
-        <>
-        <Pagination.First onClick={() => {setCurrentPage(1)}} />
-      <Pagination.Prev onClick={() => {setCurrentPage(currentPage - 1)}}/>
-      <Pagination.Item onClick={() => {setCurrentPage(1)}}>{1}</Pagination.Item>
-      </>}
+                <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
+                <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
 
-      {currentPage - 5 > 0 && <>
-      <Pagination.Ellipsis onClick={() => {setCurrentPage(currentPage - 5)}}/>
-     </>}
+               
+                {Array.from({ length: Math.min(5, maxPage) }, (_, i) => {
+                    const pageNumber = currentPage - 2 + i;
+                    return (
+                        pageNumber > 0 && pageNumber <= maxPage && (
+                            <Pagination.Item
+                                key={pageNumber}
+                                active={pageNumber === currentPage}
+                                onClick={() => handlePageChange(pageNumber)}
+                            >
+                                {pageNumber}
+                            </Pagination.Item>
+                        )
+                    );
+                })}
 
-     {(currentPage!= 2 && currentPage > 1) && <>
-      <Pagination.Item onClick={() => {setCurrentPage(currentPage - 1)}}>{currentPage - 1}
-      </Pagination.Item>
-    </>}
-    
-      <Pagination.Item active>{currentPage}</Pagination.Item>
-
-        {currentPage +1 < maxPage && <>
-            <Pagination.Item onClick={() => {setCurrentPage(currentPage+1)}}>{currentPage + 1}</Pagination.Item>
-        </>}
-
-            {currentPage + 5 <= maxPage && <>
-                <Pagination.Ellipsis onClick={() => {setCurrentPage(currentPage+5)}}/>
-            </>}
-
-      {currentPage < maxPage && <>
-      <Pagination.Item onClick={() => {setCurrentPage(maxPage)}}>{maxPage}</Pagination.Item>
-      <Pagination.Next onClick={() => {setCurrentPage(currentPage+1)}}/>
-      <Pagination.Last onClick={() => {setCurrentPage(maxPage)}}/>
-      </>}
-     
-    </Pagination>
+                <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === maxPage} />
+                <Pagination.Last onClick={() => handlePageChange(maxPage)} disabled={currentPage === maxPage} />
+            </Pagination>
         </Container>
-    
-    </>
-    
-}
+    );
+};
+
 export default HomePage;
+
+
+
+
+
+
+
