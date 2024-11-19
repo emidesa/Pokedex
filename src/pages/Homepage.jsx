@@ -55,7 +55,7 @@ const HomePage = () => {
                 <Form.Control
                     type="text"
                     id="search"
-                    placeholder="e.g., Bulbasaur"
+                    placeholder="Ex : Bulbasaur"
                     className="mb-3"
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
