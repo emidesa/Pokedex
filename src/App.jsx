@@ -1,30 +1,26 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Homepage from './pages/Homepage';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import Navbar from "./components/Navbar"
 import PokemonDetails from './pages/PokemonDetails';
 import './App.css';
+import HomePage from './pages/homepage';
+import PokeType from './pages/PokeType';
 
 
 function App() {
   return (
     <>
       <BrowserRouter>
-      <Navbar bg="dark" variant="dark" expand="lg">
-      <Container>
-       
-        <Nav className="ml-auto">
-          <Nav.Link href="/homePage">Home</Nav.Link>
-        </Nav>
-      </Container>
-    </Navbar>
+      <Navbar />
 
         <Routes>
 
-          <Route path='/HomePage' element={<Homepage />} />
+          <Route path='/HomePage' element={<HomePage />} />
           <Route path="/pokemon/:name" element={<PokemonDetails />} />
+          <Route path="/pokemonType/:typeName" element={<PokeType />} />
 
+        
 
         </Routes>
       </BrowserRouter>
