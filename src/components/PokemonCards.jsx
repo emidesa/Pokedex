@@ -15,6 +15,7 @@ const PokemonCards = ({ pokemon }) => {
         variant="top"
         src={`https://img.pokemondb.net/artwork/${pokemon.name}.jpg`}
         alt={pokemon.name}
+        className='pokemon-image'
       />
       <Card.Body>
         <Card.Title className="d-flex align-items-center flex-column">

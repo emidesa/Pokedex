@@ -7,13 +7,13 @@ import { Col, Container, Row } from "react-bootstrap";
 
 
 const PokeType = () => {
-  const { typeName } = useParams(); // Le nom du type passé en paramètre d'URL
+  const { typeName } = useParams(); 
   const [pokemons, setPokemons] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchPokemonsByType = async () => {
     try {
-      const response = await TypeService.getAllType(); // Récupère tous les types
+      const response = await TypeService.getAllType(); 
       const typeData = response.data.results.find((type) => type.name === typeName);
 
       if (!typeData) {
@@ -22,8 +22,8 @@ const PokeType = () => {
         return;
       }
 
-      const typeResponse = await axios.get(typeData.url); // Requête pour les Pokémon de ce type
-      setPokemons(typeResponse.data.pokemon.map((p) => p.pokemon)); // Récupère uniquement les Pokémon
+      const typeResponse = await axios.get(typeData.url); 
+      setPokemons(typeResponse.data.pokemon.map((p) => p.pokemon)); 
     } catch (error) {
       console.error("Erreur lors de la récupération des Pokémon par type :", error);
     } finally {
@@ -44,7 +44,7 @@ const PokeType = () => {
 
       <Row className="g-3"> 
         {pokemons.map((pokemon, index) => (
-          <Col key={index}  sm={6} md={4} lg={3}> {/* Les colonnes ajustent la taille selon l'écran */}
+          <Col key={index}  sm={6} md={4} lg={3}> 
             <PokemonCards pokemon={pokemon} />
           </Col>
         ))}

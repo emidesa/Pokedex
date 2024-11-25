@@ -6,26 +6,24 @@ import PokemonDetails from './pages/PokemonDetails';
 import './App.css';
 import HomePage from './pages/homepage';
 import PokeType from './pages/PokeType';
-
+import PokeGeneration from './pages/pokeGeneration';
+import VersionGroupPage from './pages/versionGroupPage';
 
 function App() {
   return (
-    <>
-      <BrowserRouter>
+    <BrowserRouter>
       <Navbar />
-
-        <Routes>
-
-          <Route path='/HomePage' element={<HomePage />} />
-          <Route path="/pokemon/:name" element={<PokemonDetails />} />
-          <Route path="/pokemonType/:typeName" element={<PokeType />} />
-
-        
-
-        </Routes>
-      </BrowserRouter>
-    </>
+      <Routes>
+        <Route path='/' element={<HomePage />} />
+        <Route path='/HomePage' element={<HomePage />} />
+        <Route path="/pokemon/:name" element={<PokemonDetails />} />
+        <Route path="/pokemonType/:typeName" element={<PokeType />} />
+        <Route path="/generation/:generationId" element={<PokeGeneration />} />
+        <Route path="/version-group/:versionGroupId" element={<VersionGroupPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
 export default App;
+
