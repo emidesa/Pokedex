@@ -8,6 +8,7 @@ const NavbarComponent = () => {
   const [types, setTypes] = useState([]);
   const [generations, setGenerations] = useState([]);
   const [versions, setVersions] = useState([]);
+  const [habitat, setHabitat] = useState([]);
   const navigate = useNavigate();
 
   const fetchTypes = async () => {
@@ -37,10 +38,20 @@ const NavbarComponent = () => {
     }
   };
 
+  const fetchHabitat = async () => {
+    try {
+      const response = await axios.get("https://pokeapi.co/api/v2/pokemon-habitat/");
+      setHabitat(response.data.results);
+    } catch (error) {
+      console.error("Error fetching versions:", error);
+    }
+  };
+
   useEffect(() => {
     fetchTypes();
     fetchGenerations();
     fetchVersions();
+    fetchHabitat();
   }, []);
 
   const handleSelectGeneration = (url) => {
@@ -100,6 +111,23 @@ const NavbarComponent = () => {
                   onClick={() => handleSelectVersion(version.url)}
                 >
                   {version.name}
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
+
+          <Dropdown>
+            <Dropdown.Toggle variant="secondary" id="dropdown-types">
+              Habitat
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              {habitat.map((habitat, index) => (
+                <Dropdown.Item 
+                  key={index} 
+                  as={Link} 
+                  to={`/pokemonHabitat/${habitat.name}`}
+                >
+                  {habitat.name}
                 </Dropdown.Item>
               ))}
             </Dropdown.Menu>

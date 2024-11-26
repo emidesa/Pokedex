@@ -8,6 +8,8 @@ import HomePage from './pages/homepage';
 import PokeType from './pages/PokeType';
 import PokeGeneration from './pages/pokeGeneration';
 import VersionGroupPage from './pages/versionGroupPage';
+import HabitatPage from './pages/HabitatPage';
+
 
 function App() {
   return (
@@ -20,6 +22,7 @@ function App() {
         <Route path="/pokemonType/:typeName" element={<PokeType />} />
         <Route path="/generation/:generationId" element={<PokeGeneration />} />
         <Route path="/version-group/:versionGroupId" element={<VersionGroupPage />} />
+        <Route path="/pokemonHabitat/:habitatName" element={<HabitatPage />} />
       </Routes>
     </BrowserRouter>
   );
